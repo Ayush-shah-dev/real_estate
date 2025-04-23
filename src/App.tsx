@@ -1,36 +1,36 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
-
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ServicesPage from './pages/ServicesPage';
-import ProjectsPage from './pages/ProjectsPage';
-import ProjectDetailPage from './pages/ProjectDetailPage';
-import ContactPage from './pages/ContactPage';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Stock from './pages/Stock';
+import Clients from './pages/Clients';
+import Orders from './pages/Orders';
+import Login from './pages/Login';
+import AuthGuard from './components/AuthGuard';
+import { AppProvider } from './context/AppContext';
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/projects/:category" element={<ProjectsPage />} />
-            <Route path="/project/:id" element={<ProjectDetailPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
-        </main>
-        <Footer />
-        <WhatsAppButton />
-      </div>
-    </Router>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          <Route element={<AuthGuard><Layout /></AuthGuard>}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/stock" element={<Stock />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Toaster position="top-right" />
+      </Router>
+    </AppProvider>
   );
 }
 
